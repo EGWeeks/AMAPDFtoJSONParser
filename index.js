@@ -2,8 +2,8 @@
 
 var fs = require('fs'),
 	download = require('download'),
-	PDFParser = require('./node_modules/pdf2json/PDFParser');
-
+	PDFParser = require('./node_modules/pdf2json/PDFParser'),
+	jsonFormat = require('./node_modules/json-format/index');
 
 
 // Only need to run once 
@@ -51,17 +51,22 @@ function readLapTimesDir() {
 // Makes of copy of the pdf in JSON format
 // Stores it in local laptimes directory
 function copyPDFToJSON(filePath) {
-
+	var formatConfig = {
+		type: 'space',
+		size: 3
+	};
 	var pdfParser = new PDFParser();
 
 	pdfParser.on("pdfParser_dataError", function(errData){ 
 		console.error(errData.parserError); 
 	});
 	pdfParser.on("pdfParser_dataReady", function(pdfData){
-    fs.writeFile("./laptimes/"+filePath+".json", JSON.stringify(pdfData));
+    fs.writeFile("./laptimes/"+filePath+".json", jsonFormat(pdfData, formatConfig));
 	});
 
 	pdfParser.loadPDF("./laptimes/"+filePath);
 
 }
+
+readLapTimesDir();
 
