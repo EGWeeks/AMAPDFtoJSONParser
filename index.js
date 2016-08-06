@@ -40,9 +40,11 @@ function fetchLapTimesPDF() {
 function readLapTimesDir() {
 	fs.readdir('laptimes', function(err, motoFilesArr) {
 		if(err) throw err;
+
 		motoFilesArr.forEach(function(curr, index) {
 			copyPDFToJSON(curr);
 		});
+
 	});
 }
 
@@ -51,22 +53,59 @@ function readLapTimesDir() {
 // Makes of copy of the pdf in JSON format
 // Stores it in local laptimes directory
 function copyPDFToJSON(filePath) {
+	// JSON formatter config
 	var formatConfig = {
 		type: 'space',
 		size: 3
 	};
+
 	var pdfParser = new PDFParser();
 
 	pdfParser.on("pdfParser_dataError", function(errData){ 
 		console.error(errData.parserError); 
 	});
 	pdfParser.on("pdfParser_dataReady", function(pdfData){
-    fs.writeFile("./laptimes/"+filePath+".json", jsonFormat(pdfData, formatConfig));
+    fs.writeFile("./lap-times-json/"+filePath+".json", jsonFormat(pdfData, formatConfig), function(err) {
+    	if(err) console.error("Houston, we've had a problem here. " + err);
+    	console.log("Houston, We've completed the conversion ");
+    });
 	});
 
 	pdfParser.loadPDF("./laptimes/"+filePath);
 
 }
 
-readLapTimesDir();
 
+
+function readJSONDir() {
+	fs.readdir('lap-times-json', function(err, jsonFiles) {
+		if(err) console.error(" Error reading directory. " + err);
+
+		jsonFiles.forEach(function(currFile, index) {
+			parseRiderData(currFile);
+		});
+
+	});
+}
+
+
+var pageData = {};
+
+function parseRiderData(lapTimeFile) {
+	fs.readFile('lap-times-json/'+lapTimeFile, function(err, data) {
+		if(err) console.error("Error occured in parseRiderDate readfile method. " + err);
+		var files = JSON.parse(data).formImage.Pages;
+
+		files.forEach(function(currPage, i){
+			pageData[i] = {};
+			currPage.Texts.forEach(function(singleData, n) {
+				pageData[i][n] = singleData.R[0].T;
+				console.log(pageData[i][n]);
+			});
+		});
+	});
+}
+
+
+
+readJSONDir();
