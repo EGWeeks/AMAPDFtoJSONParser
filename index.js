@@ -99,9 +99,18 @@ function parseRiderData(lapTimeFile) {
 		files.forEach(function(currPage, i){
 			pageData[i] = {};
 			currPage.Texts.forEach(function(singleData, n) {
-				pageData[i][n] = singleData.R[0].T;
-				console.log(pageData[i][n]);
+				var raceData = decodeURI(singleData.R[0].T).replace(/%3A/g, '.').replace(/^ /, '');
+				console.log(raceData);
+				// if(n < 7) {
+				// 	pageData[i]["raceData" + n] = raceData.replace(/%2c/g, ',');
+				// 	if(n === 6) {
+				// 		pageData[i].riderData = [];
+				// 	}
+				// } else if(raceData.indexOf('#') === 0){
+				// 	pageData[i]["riderNum" + n] = raceData.replace(/%23/g, '#');
+				// }
 			});
+			// console.log(pageData[i]);
 		});
 	});
 }
