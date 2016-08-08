@@ -84,13 +84,12 @@ function readJSONDir() {
 		jsonFiles.forEach(function(currFile, index) {
 			parseRiderData(currFile);
 		});
-		console.log(pageData[0]);
 	});
 
 }
 
 
-var pageData = {};
+var pageData = [];
 
 function parseRiderData(lapTimeFile) {
 	fs.readFile('lap-times-json/'+lapTimeFile, function(err, data) {
@@ -99,7 +98,7 @@ function parseRiderData(lapTimeFile) {
 		var files = JSON.parse(data).formImage.Pages;
 
 		files.forEach(function(currPage, i){
-			pageData[i] = {};
+			pageData.push({});
 
 			currPage.Texts.forEach(function(singleData, n) {
 				var raceData = decodeURI(singleData.R[0].T).replace(/^ /, '').replace(/%23/g, '#');
@@ -124,7 +123,7 @@ function parseRiderData(lapTimeFile) {
 				}
 			});		
 		});
-		console.log(pageData);
+		console.log(pageData[0]);
 	});
 }
 
