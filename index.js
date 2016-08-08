@@ -84,8 +84,9 @@ function readJSONDir() {
 		jsonFiles.forEach(function(currFile, index) {
 			parseRiderData(currFile);
 		});
-
+		console.log(pageData[0]);
 	});
+
 }
 
 
@@ -94,27 +95,38 @@ var pageData = {};
 function parseRiderData(lapTimeFile) {
 	fs.readFile('lap-times-json/'+lapTimeFile, function(err, data) {
 		if(err) console.error("Error occured in parseRiderDate readfile method. " + err);
+
 		var files = JSON.parse(data).formImage.Pages;
 
 		files.forEach(function(currPage, i){
 			pageData[i] = {};
+
 			currPage.Texts.forEach(function(singleData, n) {
-				var raceData = decodeURI(singleData.R[0].T).replace(/%3A/g, '.').replace(/^ /, '');
-				console.log(raceData);
-				// if(n < 7) {
-				// 	pageData[i]["raceData" + n] = raceData.replace(/%2c/g, ',');
-				// 	if(n === 6) {
-				// 		pageData[i].riderData = [];
-				// 	}
-				// } else if(raceData.indexOf('#') === 0){
-				// 	pageData[i]["riderNum" + n] = raceData.replace(/%23/g, '#');
-				// }
-			});
-			// console.log(pageData[i]);
+				var raceData = decodeURI(singleData.R[0].T).replace(/^ /, '').replace(/%23/g, '#');
+				if(n < 7) {
+					pageData[i]["raceData" + n] = raceData.replace(/%2C/g, ',');
+					if(n === 6) {
+						pageData[i].riderData = [];
+					}
+				} else {
+					var riderObj = pageData[i].riderData.length > 1 ? pageData[i].riderData[pageData[i].riderData.length - 1] : pageData[i].riderData[0];
+					if(raceData.indexOf('#') === 0) {
+						pageData[i].riderData.push({
+							number: raceData
+						});
+					}else if(/[A-Z]/.test(raceData[0]) && raceData[1] === '.'){
+						riderObj.name = raceData;
+					}else if(raceData === 'KAW' || raceData === 'YAM' || raceData === 'HON' || raceData === 'SUZ' || raceData === 'KTM' || raceData === 'HUS') {
+						riderObj.bike = raceData;
+					}else if(raceData.length < 3) {
+					 	riderObj[raceData] = currPage.Texts[n + 1].R[0].T.replace(/%3A/g, '.');
+					}
+				}
+			});		
 		});
+		console.log(pageData);
 	});
 }
-
 
 
 readJSONDir();
