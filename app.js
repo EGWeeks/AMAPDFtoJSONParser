@@ -86,7 +86,6 @@ function jsonParser(jsonData) {
 		});		
 	});
 	const formatConfig = {type: 'space',size: 3};
-	// let stringedData = JSON.stringify(pageData);
 	return jsonFormat(pageData, formatConfig);
 }
   
