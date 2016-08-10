@@ -12,6 +12,8 @@
     "download": "5.0.2",
     "download-pdf": "0.1.6",
     "json-format": "^0.1.2",
-    "pdf2json": "^1.1.6"
+    "knex": "^0.11.10",
+    "pdf2json": "^1.1.6",
+    "pg": "^6.0.3"
   }
 }

@@ -1,9 +1,18 @@
 'use strict';
 
+/*
+	Built to get Pro Motocross lap times
+	08/09/16 - Data could not be found in any other format but PDFs
+	
+	americanmotocrossresults.com
+	fetchLapTimesPDF function needs to be invoked to get all the PDFS
+
+*/
+
 const fs = require('fs'),
 	download = require('download'),
   PDFParser = require('./node_modules/pdf2json/pdfparser'),
-  jsonFormat = require('./node_modules/json-format/index');
+  jsonParser = require('./lib/laptimeparser');
 
 
 
@@ -21,10 +30,8 @@ const fs = require('fs'),
 
 
 function fetchLapTimesPDF() {
-
 	Promise.all(
 		urlArr().map((pdfLink, index) => {
-			
 			download(pdfLink).then(pdf => {
 					let pdfFilePath = 'laptimes/moto'+index+'.pdf';
 					let jsonFilePath = 'lap-times-json/moto'+index+'.json';
@@ -33,11 +40,9 @@ function fetchLapTimesPDF() {
 						pdfTojson(pdfFilePath, jsonFilePath);
 					});				
 				});
-		})).then(() => {
-			console.log('Lap Time PDFs have been downloaded successfully.');
-		}).catch(reject => {
-			console.error('Download ended in Error: '+ reject);
-		});
+		}))
+	.then((res) => console.log(res))
+	.catch(err => console.error('Promise all URLs ended in Error: '+ err));
 }
 
 
@@ -54,39 +59,3 @@ function pdfTojson(pdfFilePath, jsonFilePath) {
 
   pdfParser.loadPDF(pdfFilePath);
 }
-
-function jsonParser(jsonData) {
-	let pageData = [];
-	let motoData = jsonData.formImage.Pages;
-
-	motoData.forEach(function(currPage, i){
-		pageData.push({});
-
-		currPage.Texts.forEach(function(singleData, n) {
-			var raceData = decodeURI(singleData.R[0].T).replace(/^ /, '').replace(/%23/g, '#');
-			if(n < 7) {
-				pageData[i]["raceData" + n] = raceData.replace(/%2C/g, ',');
-				if(n === 6) {
-					pageData[i].riderData = [];
-				}
-			} else {
-				var riderObj = pageData[i].riderData.length > 1 ? pageData[i].riderData[pageData[i].riderData.length - 1] : pageData[i].riderData[0];
-				if(raceData.indexOf('#') === 0) {
-					pageData[i].riderData.push({
-						number: raceData
-					});
-				}else if(/[A-Z]/.test(raceData[0]) && raceData[1] === '.'){
-					riderObj.name = raceData;
-				}else if(raceData === 'KAW' || raceData === 'YAM' || raceData === 'HON' || raceData === 'SUZ' || raceData === 'KTM' || raceData === 'HUS') {
-					riderObj.bike = raceData;
-				}else if(raceData.length < 3) {
-				 	riderObj[raceData] = currPage.Texts[n + 1].R[0].T.replace(/%3A/g, '.');
-				}
-			}
-		});		
-	});
-	const formatConfig = {type: 'space',size: 3};
-	return jsonFormat(pageData, formatConfig);
-}
-  
-fetchLapTimesPDF();
