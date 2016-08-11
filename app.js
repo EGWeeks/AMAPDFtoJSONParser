@@ -3,10 +3,14 @@
 /*
 	Built to get Pro Motocross lap times
 	08/09/16 - Data could not be found in any other format but PDFs
-	
+	Programmed in an async style
+	I know! I should have done it all in Promises.
+	This is a thrown together prototype.
+
 	americanmotocrossresults.com
 	fetchLapTimesPDF function needs to be invoked to get all the PDFS
-
+	Please be respectful of their servers
+	Every PDF download hits the server
 */
 
 const fs = require('fs'),
@@ -41,7 +45,7 @@ function fetchLapTimesPDF() {
 					});				
 				});
 		}))
-	.then((res) => console.log(res))
+	.then((res) => console.log("Downloading... Reading... Writing... Parsing..."))
 	.catch(err => console.error('Promise all URLs ended in Error: '+ err));
 }
 
