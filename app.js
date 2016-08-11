@@ -59,3 +59,5 @@ function pdfTojson(pdfFilePath, jsonFilePath) {
 
   pdfParser.loadPDF(pdfFilePath);
 }
+
+fetchLapTimesPDF();
