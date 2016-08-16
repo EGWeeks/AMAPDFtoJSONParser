@@ -1,0 +1,1 @@
+mongorestore -h ds153815.mlab.com:53815 -d motocross -u $2 -p $3 dump/motocross/documents.bson
