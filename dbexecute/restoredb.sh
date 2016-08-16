@@ -6,14 +6,17 @@
 # =
 # $ sh $0 $1 $2
 
-# should show path to something.sh
+# show path to path/to/executables.sh
 echo $0
 
-#should show DB_USER
+# show DB_HOST
 echo $1
 
-#should show DB_PW
+# show DB_USER
 echo $2
 
+# show DB_PW
+echo $3
+
 # executable command to restore hosted database
-mongorestore -h ds153815.mlab.com:53815 -d motocross -u $1 -p $2 dump/motocross/documents.bson
+mongorestore -h $1 -d motocross -u $2 -p $3 dump/motocross/documents.bson
