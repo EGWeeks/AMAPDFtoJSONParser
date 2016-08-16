@@ -1,6 +1,10 @@
-# show positional parameter 0,1,2
+# show positional parameter $0, $1, $2
 # also known as command line arguments
 # is there a difference?
+
+# $ sh ./dbexcute/restoredb.sh DB_USER DB_PW
+# =
+# $ sh $0 $1 $2
 
 # should show path to something.sh
 echo $0
