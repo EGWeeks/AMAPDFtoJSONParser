@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^2.0.0",
     "download": "5.0.2",
     "download-pdf": "0.1.6",
     "json-format": "^0.1.2",

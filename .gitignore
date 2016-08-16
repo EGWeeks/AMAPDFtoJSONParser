@@ -4,3 +4,6 @@ laptimes
 lap-times-json
  
 node_modules
+
+.env
+

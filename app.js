@@ -18,7 +18,7 @@ const fs = require('fs'),
   PDFParser = require('./node_modules/pdf2json/pdfparser'),
   jsonParser = require('./lib/laptimeparser');
 
-
+	require('dotenv').config();
 
  function urlArr() {
  	const urlsToGet = [];
