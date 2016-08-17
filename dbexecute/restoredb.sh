@@ -19,4 +19,4 @@ echo 'positional parameter $2 : Database Username - '$2
 echo 'positional parameter $3 : Database Password - '$3
 
 # executable command to restore hosted database
-mongorestore -h $1 -d motocross -u $2 -p $3 dump/motocross/documents.bson
+mongoimport -h $1 -d motocross -c documents -u $2 -p $3 --file laptimes/allmoto.json
