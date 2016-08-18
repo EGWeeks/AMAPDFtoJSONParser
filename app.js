@@ -33,7 +33,7 @@ function urlArr() {
 
 
 function getPDFs() {
-	return Promise.all(urlArr().map((pdfLink) => download(pdfLink)));
+	return Promise.all(urlArr().map(pdfLink => download(pdfLink)));
 }
 
 
@@ -41,7 +41,7 @@ function getPDFs() {
 function writePDFs(pdfs) {
 	let promises = pdfs.map((pdf, index) => {
 		return new Promise((resolve, reject) => {
-			fs.writeFile('laptimes/moto'+index+'.pdf', pdf, (err) => {
+			fs.writeFile('laptimes/moto'+index+'.pdf', pdf, err => {
 				if(err) reject(err);
 				resolve('laptimes/moto'+index+'.pdf');
 			});
@@ -54,7 +54,7 @@ function writePDFs(pdfs) {
 
 
 function getToJSON(pathsPDFs) {
-	let promises = pathsPDFs.map((pathPDF) => {
+	let promises = pathsPDFs.map(pathPDF => {
 		return new Promise((resolve, reject) => {
 			const pdfParser = new PDFParser();
 			pdfParser.loadPDF(pathPDF);
@@ -73,13 +73,18 @@ function sendToParser(allRaceJSON) {
 	return Promise.resolve(jsonParser(allRaceJSON));
 }
 
+
+
 function writeJSONData(allRaceJSON) {
-	return new Promise((resolve, reject) => {
-		fs.writeFile('laptimes/allmoto.json', JSON.stringify(allRaceJSON), (err) => {
-			if(err) reject(err);
-			resolve('./laptimes/allmoto.json');
+	let promises = allRaceJSON.map(eachRace => {
+		return new Promise((resolve, reject) => {
+			fs.appendFile('laptimes/allmoto.json', JSON.stringify(eachRace), err => {
+				if(err) reject(err);
+				resolve('./laptimes/allmoto.json');
+			});
 		});
 	});
+	return Promise.all(promises);
 }
 
 
@@ -98,9 +103,9 @@ getPDFs()
 		return writeJSONData(allParsedJSON);
 	})
 	.then(pathToJSON => {
-		return execToDB(pathToJSON);
+		return execToDB(pathToJSON[0]);
 	})
 	.then(stuff => {
 		console.log(stuff);
 	})
-	.catch(err => console.error('Promise all URLs ended in Error: '+ err));
+	.catch(err => console.error('Promise all URLs ended in '+ err));
