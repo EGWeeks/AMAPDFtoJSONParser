@@ -2,7 +2,6 @@
 
 /*
 	Built to get Pro Motocross lap times
-	08/09/16 - Data could not be found in any other format but PDFs
 
 	americanmotocrossresults.com
 	Please be respectful of their servers

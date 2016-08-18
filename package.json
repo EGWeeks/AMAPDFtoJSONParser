@@ -1,13 +1,13 @@
 {
-  "name": "pdftojson",
-  "version": "2.0.0",
+  "name": "pdftoMongo",
+  "version": "2.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Weeks",
+  "license": "MIT",
   "dependencies": {
     "dotenv": "^2.0.0",
     "download": "5.0.2",
