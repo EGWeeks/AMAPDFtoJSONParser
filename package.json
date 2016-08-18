@@ -1,6 +1,6 @@
 {
   "name": "pdftojson",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,6 @@
     "dotenv": "^2.0.0",
     "download": "5.0.2",
     "download-pdf": "0.1.6",
-    "json-format": "^0.1.2",
     "mongodb": "^2.2.5",
     "pdf2json": "^1.1.6"
   }

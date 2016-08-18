@@ -1,1 +1,0 @@
-mongodump -d motocross
