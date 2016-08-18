@@ -6,7 +6,7 @@
 
 	americanmotocrossresults.com
 	Please be respectful of their servers
-	Every PDF download hits the server
+	Every PDF download hits their server
 */
 
   const fs = require('fs'),
@@ -18,7 +18,8 @@ jsonParser = require('./lib/laptimeparser'),
 require('dotenv').config();
 
 
-
+// Races increment by fives &
+// Any race that has not occured returns 404
 function urlArr() {
 	const urlsToGet = [];
 	for(let i = 1605; i < 1655; i += 5) {
@@ -31,13 +32,15 @@ function urlArr() {
 }
 
 
-
+// Download returns Promise &
+// Will reject 404 returns
 function getPDFs() {
 	return Promise.all(urlArr().map(pdfLink => download(pdfLink)));
 }
 
 
-
+// Writing for the PDF parser
+// Requires a file 
 function writePDFs(pdfs) {
 	let promises = pdfs.map((pdf, index) => {
 		return new Promise((resolve, reject) => {
@@ -47,7 +50,6 @@ function writePDFs(pdfs) {
 			});
 		});
 	});
-
 	return Promise.all(promises);
 }
 
@@ -58,10 +60,8 @@ function getToJSON(pathsPDFs) {
 		return new Promise((resolve, reject) => {
 			const pdfParser = new PDFParser();
 			pdfParser.loadPDF(pathPDF);
-
 			pdfParser.on('pdfParser_dataError', errData => reject(errData));
   		pdfParser.on('pdfParser_dataReady', jsonData => resolve(jsonData));
-
 		});
 	});
 	return Promise.all(promises);
@@ -74,7 +74,7 @@ function sendToParser(allRaceJSON) {
 }
 
 
-
+// Writing to send file on Mongo import exec
 function writeJSONData(allRaceJSON) {
 	let promises = allRaceJSON.map(eachRace => {
 		return new Promise((resolve, reject) => {
@@ -90,22 +90,11 @@ function writeJSONData(allRaceJSON) {
 
 
 getPDFs()
-	.then(res => {
-		return writePDFs(res);
-	})
-	.then(pathsPDFs => {
-		return getToJSON(pathsPDFs);
-	})
-	.then(allRaceJSON => {
-		return sendToParser(allRaceJSON);
-	})
-	.then(allParsedJSON => {
-		return writeJSONData(allParsedJSON);
-	})
-	.then(pathToJSON => {
-		return execToDB(pathToJSON[0]);
-	})
-	.then(stuff => {
-		console.log(stuff);
-	})
-	.catch(err => console.error('Promise all URLs ended in '+ err));
+	.then(pdfs => writePDFs(pdfs))
+	.then(pathsPDFs => getToJSON(pathsPDFs))
+	.then(allRaceJSON => sendToParser(allRaceJSON))
+	.then(allParsedJSON => writeJSONData(allParsedJSON))
+	.then(pathToJSON => execToDB(pathToJSON[0]))
+	.catch(err => console.error(err));
+
+
