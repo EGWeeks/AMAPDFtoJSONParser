@@ -12,7 +12,7 @@
   download = require('download'),
  PDFParser = require('./node_modules/pdf2json/pdfparser'),
 jsonParser = require('./lib/laptimeparser'),
-  execToDB = require('./lib/exec.js');
+  execFiles = require('./lib/exec.js');
 
 require('dotenv').config();
 
@@ -93,7 +93,9 @@ getPDFs()
 	.then(pathsPDFs => getToJSON(pathsPDFs))
 	.then(allRaceJSON => sendToParser(allRaceJSON))
 	.then(allParsedJSON => writeJSONData(allParsedJSON))
-	.then(pathToJSON => execToDB(pathToJSON[0]))
+	.then(pathToJSON => execFiles.dropCollection(pathToJSON[0]))
+	.then(pathToJSON => execFiles.toDB(pathToJSON))
+	.then(success => console.log(success+' Good To Go!'))
 	.catch(err => console.error(err));
 
 
