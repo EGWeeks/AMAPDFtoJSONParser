@@ -17,6 +17,7 @@ jsonParser = require('./lib/laptimeparser'),
 require('dotenv').config();
 
 
+
 // Races increment by fives &
 // Any race that has not occured returns 404
 function urlArr() {
@@ -72,10 +73,18 @@ function sendToParser(allRaceJSON) {
 	return Promise.resolve(jsonParser(allRaceJSON));
 }
 
+function unlinkFile(parsedJSON) {
+	return new Promise((resolve, reject) => {
+		fs.unlink('laptimes/allmoto.json', err => {
+			if(err) reject(err);
+			resolve(parsedJSON);
+		});
+	});
+}
 
 // Writing to send file on Mongo import exec
 function writeJSONData(allRaceJSON) {
-	let promises = allRaceJSON.map(eachRace => {
+	let promises = allRaceJSON.map((eachRace, index) => {
 		return new Promise((resolve, reject) => {
 			fs.appendFile('laptimes/allmoto.json', JSON.stringify(eachRace), err => {
 				if(err) reject(err);
@@ -92,6 +101,7 @@ getPDFs()
 	.then(pdfs => writePDFs(pdfs))
 	.then(pathsPDFs => getToJSON(pathsPDFs))
 	.then(allRaceJSON => sendToParser(allRaceJSON))
+	.then(parsedJSON => unlinkFile(parsedJSON))
 	.then(allParsedJSON => writeJSONData(allParsedJSON))
 	.then(pathToJSON => execFiles.dropCollection(pathToJSON[0]))
 	.then(pathToJSON => execFiles.toDB(pathToJSON))
