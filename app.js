@@ -22,7 +22,7 @@ require('dotenv').config();
 // Any race that has not occured returns 404
 function urlArr() {
 	const urlsToGet = [];
-	for(let i = 1605; i < 1660; i += 5) {
+	for(let i = 1605; i < 1665; i += 5) {
 		for(let n = 1; n < 3; n++) {
 			urlsToGet.push("http://americanmotocrossresults.com/xml/MX/events/M"+ i +"/M"+ n +"F1RID.pdf");
 			urlsToGet.push("http://americanmotocrossresults.com/xml/MX/events/M"+ i +"/M"+ n +"F2RID.pdf");
