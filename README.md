@@ -8,7 +8,7 @@ The Node.js app is downloading all the lap time PDFs then parsing them to JSON. 
 Then the last step is sending the JSON up to the hosted database connected to the [Pro Motocross API](http://promotocrossapi.com). This is one of the unique processes of the parser app. Instead of using a driver to connect to my hosted database I am use Node's core module Child Process to execute some shell files. For no particular purpose other than to test out child process, which is awesome.
 
 ###The beauty of promises
-#### app.js
+#### ./app.js
 The benefits of chaining Promises, it reads like instructions on how to make ramen noodles.
 Plus when we get a rejection we will know exactly what Promise it came from.
 No need to preach to the chore.
@@ -31,11 +31,6 @@ Nothing wrong with async but a bit harder to read and more funny to debug.
 
 ```javascript
 // Version 1.0.0
-
-const fs = require('fs'),
-download = require('download'),
-PDFParser = require('./node_modules/pdf2json/pdfparser'),
-jsonParser = require('./lib/laptimeparser');
 
 function urlArr() {
  	const urlsToGet = [];
@@ -60,6 +55,7 @@ function fetchLapTimesPDF() {
 					});				
 				});
 		}))
+	.then(res => console.log('Success! ' + res))
 	.catch(err => console.error('Promise all URLs ended in Error: '+ err));
 }
 
