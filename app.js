@@ -61,7 +61,7 @@ function getToJSON(pathsPDFs) {
 			const pdfParser = new PDFParser();
 			pdfParser.loadPDF(pathPDF);
 			pdfParser.on('pdfParser_dataError', errData => reject(errData));
-  		pdfParser.on('pdfParser_dagit staReady', jsonData => resolve(jsonData));
+  		pdfParser.on('pdfParser_dataReady', jsonData => resolve(jsonData));
 		});
 	});
 	return Promise.all(promises);
