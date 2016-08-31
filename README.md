@@ -12,6 +12,7 @@ Then the last step is sending the JSON up to the hosted database connected to th
 The benefits of chaining Promises, it reads like instructions on how to make ramen noodles.
 Plus when we get a rejection we will know exactly what Promise it came from.
 No need to preach to the chore.
+Checkout app.js to see the full creation.
 ```javascript 
 // Version 2.0.0
 
