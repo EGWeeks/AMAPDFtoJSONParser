@@ -9,7 +9,7 @@ Then the last step is sending the JSON up to the hosted database connected to th
 
 ###The beauty of promises
 #### ./app.js
-The benefits of chaining Promises, it reads like instructions on how to make ramen noodles.
+The benefits of chaining Promises, it reads like instructions on how to make toast.
 Plus when we get a rejection we will know exactly what Promise it came from.
 No need to preach to the chore.
 Checkout app.js to see the full creation.
@@ -32,17 +32,6 @@ Nothing wrong with async but a bit harder to read and more funny to debug.
 
 ```javascript
 // Version 1.0.0
-
-function urlArr() {
- 	const urlsToGet = [];
-	for(let i = 1605; i < 1660; i += 5) {
-		for(let n = 1; n < 3; n++) {
-			urlsToGet.push("http://americanmotocrossresults.com/xml/MX/events/M"+ i +"/M"+ n +"F1RID.pdf");
-			urlsToGet.push("http://americanmotocrossresults.com/xml/MX/events/M"+ i +"/M"+ n +"F2RID.pdf");
-		}
-	}
-	return urlsToGet;
- }
 
 function fetchLapTimesPDF() {
 	Promise.all(
